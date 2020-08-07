@@ -83,7 +83,7 @@
 using namespace BioFVM;
 using namespace PhysiCell;
 
-std::string COVID19_version = "0.3.2"; 
+std::string COVID19_version = "0.4.0"; 
 
 int main( int argc, char* argv[] )
 {
@@ -167,6 +167,8 @@ int main( int argc, char* argv[] )
 
 	std::cout << std::endl << std::endl << "***** This is COVID19 integrated version " << COVID19_version << ". *****" << std::endl << std::endl; 
 	
+	double time_lymphatics = 0.0;
+	double modulo_time_lymphatics = 20.0;
 	try 
 	{		
 		while( PhysiCell_globals.current_time < PhysiCell_settings.max_time + 0.1*diffusion_dt )
@@ -208,8 +210,15 @@ int main( int argc, char* argv[] )
 			microenvironment.simulate_diffusion_decay( diffusion_dt );
 			
 			// receptor dynamics 
-			
 			receptor_dynamics_main_model( diffusion_dt );
+
+			// lymphatic dynamics 
+			time_lymphatics += diffusion_dt;
+			if( time_lymphatics > modulo_time_lymphatics )
+			{
+				lymphatic_main_model( diffusion_dt );
+				time_lymphatics = 0.0;
+			}
 			
 			// detach dead cells 
 			// detach_all_dead_cells( diffusion_dt );

@@ -121,6 +121,8 @@ class Cell_Definition
 	int type; 
 	std::string name; 
  
+ 	std::string sbml_filename; 
+
 	Microenvironment* pMicroenvironment; 
 	
 	Cell_Parameters parameters; 
